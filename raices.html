@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listen to the rain - Pixel Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="light-theme">
+
+    <div class="cursor-dot"></div>
+
+    <header class="site-header">
+        <a href="index.html" class="back-link">← Volver al inicio</a>
+        <div class="logo">P.</div>
+    </header>
+
+    <main class="project-case-study">
+        
+        <h1 class="project-huge-title">
+            Materializando el sonido: diseño de vinilo inmersivo para un viaje musical en Barcelona.
+        </h1>
+
+        <div class="project-details-grid">
+            
+            <div class="project-about">
+                <div class="detail-label">● Acerca del proyecto</div>
+                <p class="base-text">
+                    Este proyecto musical requería una traslación visual de su atmósfera íntima y profunda. Diseñamos la portada y el packaging del disco utilizando texturas crudas, oscuridad fotográfica y una tipografía minimalista, reflejando la pureza de las composiciones sonoras.                </p>
+                <p class="base-text bold-text">
+                    Destacados – El disco físico no solo sirve como contenedor musical, sino que fue concebido como un objeto de arte coleccionable que complementa la experiencia auditiva de forma táctil y visual.                </p>
+            </div>
+
+            <div class="project-features">
+                <div class="detail-label">● Disciplinas</div>
+                <div class="feature-tags">
+                    <span>Vinilo</span>
+                    <span>Packaging</span>
+                    <span>Música</span>
+                    <span>Barcelona</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="project-gallery-placeholder">
+            <p>Aquí irá la galería de fotos de Listen to the rain...</p>
+        </div>
+
+    </main>
+
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        // Scroll Suave
+        const lenis = new Lenis({ duration: 2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.pageX + 'px'; cursorDot.style.top = e.pageY + 'px';
+        });
+
+        // NUEVO: Detectar scroll para el blur del header
+        const header = document.querySelector('.site-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

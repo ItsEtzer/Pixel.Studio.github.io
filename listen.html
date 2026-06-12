@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listen to the rain - Pixel Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="light-theme">
+    
+<body>
+    <button id="audio-toggle" class="audio-btn" data-audio-src="cancionproyectos.mp3">SOUND [OFF]</button>
+    <div class="cursor-dot"></div>
+
+    <header class="site-header scrolled">
+        <a href="index.html" class="back-link">← VOLVER AL INICIO</a>
+        <div class="logo">P.</div>
+    </header>
+
+    <main class="project-case-study">
+        
+        <h1 class="project-huge-title">
+            Escuchar la lluvia, diseñar la atmósfera.
+        </h1>
+
+        <div class="project-details-container">
+            <div class="project-about">
+                <div class="detail-label">● ACERCA DEL PROYECTO</div>
+                <p class="base-text">
+                    Para Listen to the Rain, el desafío consistió en desarrollar el sistema visual completo para el lanzamiento del álbum de Anaïs Maviel & The Rhythm Method, abarcando desde la portada y las galletas del vinilo hasta las distintas piezas impresas que acompañan la edición. La propuesta debía integrar una serie de fotografías analógicas y altamente conceptuales, preservando su carácter experimental mientras se construía una identidad visual coherente, sensible y capaz de acompañar la experiencia sonora del disco.                </p>
+                <p class="base-text bold-text">
+                    Destacado — El proyecto transformó un conjunto de imágenes abstractas y poco convencionales en un sistema visual unificado, donde diseño, fotografía y música dialogan para crear una experiencia tan contemplativa como el propio álbum.                </p>
+            </div>
+
+            <div class="project-features">
+                <div class="detail-label">● CATEGORÍAS</div>
+                <div class="feature-tags">
+                    <span>Música</span>
+                    <span>Vinilos</span>
+                    <span>Packaging</span>
+                    <span>EEUU</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <section class="horizontal-scroll-wrapper">
+        <div class="sticky-container">
+            <div class="horizontal-track">
+                <div class="gallery-item"><img src="img/guara1mock.jpg" alt="Foto 1"></div>
+                <div class="gallery-item"><img src="img/guara2mock.jpg" alt="Foto 2"></div>
+                <div class="gallery-item"><img src="img/guara3mock.jpg" alt="Foto 3"></div>
+                <div class="gallery-item"><img src="img/guara4mock.jpg" alt="Foto 4"></div>
+                <div class="gallery-item"><img src="img/guara5mock.jpg" alt="Foto 5"></div>
+                <div class="gallery-item"><img src="img/guara6mock.jpg" alt="Foto 6"></div>
+
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="project-footer">
+        <h2 class="footer-giant-title">Pixel. Y Punto.</h2>
+        
+        <div class="footer-bottom-bar">
+            <span>© 2026 Pixel Studio. Mendoza, Arg.</span>
+            <span>@pixel.studio</span>
+            <span class="back-to-top" onclick="lenis.scrollTo(0)">↑ Arriba</span>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script>
+        // 1. Scroll Suave (Lenis)
+        const lenis = new Lenis({ duration: 2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // 2. Cursor Personalizado
+        const cursorDot = document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.pageX + 'px'; cursorDot.style.top = e.pageY + 'px';
+        });
+
+        // 3. Header Blur
+        const header = document.querySelector('.site-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { header.classList.add('scrolled'); } 
+            else { header.classList.remove('scrolled'); }
+        });
+
+        // 4. MAGIA DEL SCROLL HORIZONTAL
+        const wrapper = document.querySelector('.horizontal-scroll-wrapper');
+        const track = document.querySelector('.horizontal-track');
+
+        window.addEventListener('scroll', () => {
+            if (!wrapper || !track) return;
+
+            // Medimos dónde está la caja contenedora respecto a la pantalla
+            const wrapperRect = wrapper.getBoundingClientRect();
+            
+            // Calculamos cuánto espacio tenemos para hacer scroll
+            const scrollableDistance = wrapperRect.height - window.innerHeight;
+            
+            // Sacamos el porcentaje de avance (de 0 a 1)
+            let scrollProgress = -wrapperRect.top / scrollableDistance;
+            scrollProgress = Math.max(0, Math.min(1, scrollProgress)); // Lo mantenemos entre 0 y 1
+            
+            // Calculamos cuánto debe moverse la pista de fotos hacia la izquierda
+            const trackScrollableWidth = track.scrollWidth - window.innerWidth + (window.innerWidth * 0.1); // + padding final
+            const translateX = -(scrollProgress * trackScrollableWidth);
+            
+            // Aplicamos el movimiento
+            track.style.transform = `translateX(${translateX}px)`;
+        });
+
+        // 5. SENSOR PARA ILUMINAR EL FOOTER AL LLEGAR AL FONDO
+        const footerTitle = document.querySelector('.footer-giant-title');
+        
+        if (footerTitle) {
+            // Creamos un observador que revisa si el elemento está en pantalla
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Si al menos la mitad del texto ya entró a la pantalla...
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active'); // Lo enciende
+                    } else {
+                        entry.target.classList.remove('active'); // Lo apaga si vuelves a subir
+                    }
+                });
+            }, { threshold: 0.5 }); // 0.9 significa que actúa cuando el 50% es visible
+
+            // Le decimos al observador que vigile el título del footer
+            observer.observe(footerTitle);
+        }
+    </script>
+<script src="audio.js"></script>
+</body>
+</html>
